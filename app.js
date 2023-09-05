@@ -3,7 +3,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose=require("mongoose");
 const _ = require("lodash");
-
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -42,18 +41,14 @@ const ListSchema={
 const List = mongoose.model("List",ListSchema);
 
 app.get("/", function(req, res){
-
   Item.find({},function(err,item){
     if(item.length===0){
       Item.insertMany(defaltItems,function(err){
         if(err)console.log(err);
       });
     }
-    res.render("list", {listTitle: "Today", newListItems: item});
+    res.render("list", {listTitle: "To-Do List", newListItems: item});
   })
-
-
-
 });
 
 app.post("/", function(req, res){
@@ -64,7 +59,7 @@ app.post("/", function(req, res){
   const item = new Item({
     name:itemName
   })
-  if(listName=="Today"){
+  if(listName=="To-Do List"){
     item.save();
     res.redirect("/");
   }else{
@@ -80,7 +75,7 @@ app.post("/delete",function(req,res){
   const checkedItemId=req.body.checkbox;
   const listName=req.body.listName;
 
-  if(listName=="Today"){
+  if(listName=="To-Do List"){
     Item.findByIdAndRemove(checkedItemId,function(err){
       // if(!err)console.log("Successfully deleted");
     });
